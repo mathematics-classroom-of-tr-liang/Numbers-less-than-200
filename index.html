@@ -180,38 +180,38 @@
                     </span>
                 </div>
 
-                <!-- Structured Workspace -->
+                <!-- Structured Workspace (Horizontal 3-Column Layout) -->
                 <div id="workspace" 
                      ondragover="allowDrop(event)" 
                      ondrop="handleWorkspaceDrop(event)"
-                     class="flex-1 p-3 overflow-y-auto space-y-3 relative select-none">
+                     class="flex-1 p-2.5 overflow-hidden grid grid-cols-3 gap-2 relative select-none">
 
-                    <!-- 1. HUNDREDS ROW -->
-                    <div class="bg-slate-900/50 border border-blue-500/30 rounded-xl p-2 min-h-[110px] relative">
-                        <div class="text-xs font-black text-blue-400 mb-1 flex items-center">
+                    <!-- 1. HUNDREDS COLUMN -->
+                    <div class="bg-slate-900/50 border border-blue-500/30 rounded-xl p-2 flex flex-col h-full relative overflow-y-auto">
+                        <div class="text-xs font-black text-blue-400 mb-1.5 flex items-center shrink-0 border-b border-blue-500/20 pb-1">
                             <span class="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block mr-1.5"></span>百位 (100)
                         </div>
-                        <div id="row-hundreds" class="flex flex-wrap gap-2 items-start"></div>
+                        <div id="row-hundreds" class="flex flex-wrap gap-1.5 items-start flex-1 content-start"></div>
                     </div>
 
-                    <!-- 2. TENS ROW -->
-                    <div class="bg-slate-900/50 border border-amber-500/30 rounded-xl p-2 min-h-[110px] relative">
-                        <div class="text-xs font-black text-amber-400 mb-1 flex items-center">
+                    <!-- 2. TENS COLUMN -->
+                    <div class="bg-slate-900/50 border border-amber-500/30 rounded-xl p-2 flex flex-col h-full relative overflow-y-auto">
+                        <div class="text-xs font-black text-amber-400 mb-1.5 flex items-center shrink-0 border-b border-amber-500/20 pb-1">
                             <span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block mr-1.5"></span>十位 (10)
                         </div>
-                        <div id="row-tens" class="flex flex-wrap gap-2 items-start"></div>
+                        <div id="row-tens" class="flex flex-wrap gap-1.5 items-start flex-1 content-start"></div>
                     </div>
 
-                    <!-- 3. ONES ROW -->
-                    <div class="bg-slate-900/50 border border-slate-400/30 rounded-xl p-2 min-h-[60px] relative">
-                        <div class="text-xs font-black text-slate-300 mb-1 flex items-center">
+                    <!-- 3. ONES COLUMN -->
+                    <div class="bg-slate-900/50 border border-slate-400/30 rounded-xl p-2 flex flex-col h-full relative overflow-y-auto">
+                        <div class="text-xs font-black text-slate-300 mb-1.5 flex items-center shrink-0 border-b border-slate-400/20 pb-1">
                             <span class="w-2.5 h-2.5 rounded-full bg-white inline-block mr-1.5"></span>個位 (1)
                         </div>
-                        <div id="row-ones" class="flex flex-wrap gap-2 items-start"></div>
+                        <div id="row-ones" class="flex flex-wrap gap-1.5 items-start flex-1 content-start"></div>
                     </div>
 
                     <!-- Static Empty State Overlay -->
-                    <div id="empty-state" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 pointer-events-none">
+                    <div id="empty-state" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 pointer-events-none z-20">
                         <i class="fa-solid fa-hand-holding-hand text-4xl mb-2 text-slate-500"></i>
                         <p class="text-sm font-bold">請點擊或拖曳左側積木</p>
                     </div>
@@ -457,16 +457,16 @@
             } else {
                 emptyState.classList.add('hidden');
 
-                // 1. HUNDREDS (72x72px, 10 per row)
+                // 1. HUNDREDS COLUMN
                 renderBlockGrid(rowHundreds, state.hundreds, 'hundreds', 0);
 
-                // 2. TENS (Vertical 12x72px, Regroup Mask if >=10, 10 per row)
+                // 2. TENS COLUMN (Regroup Mask if >=10)
                 if (state.tens >= 10) {
                     const maskBox = document.createElement('div');
-                    maskBox.className = 'border-2 border-dashed border-amber-400 bg-amber-400/20 rounded-xl p-2 flex flex-col items-center gap-1.5 shadow-lg relative';
+                    maskBox.className = 'w-full border-2 border-dashed border-amber-400 bg-amber-400/20 rounded-xl p-2 flex flex-col items-center gap-1.5 shadow-lg relative shrink-0';
                     
                     const itemsContainer = document.createElement('div');
-                    itemsContainer.className = 'flex gap-1.5 items-center';
+                    itemsContainer.className = 'flex flex-wrap gap-1 items-center justify-center';
                     for (let i = 0; i < 10; i++) {
                         itemsContainer.appendChild(createBlockDOM('tens'));
                     }
@@ -474,8 +474,8 @@
 
                     const regroupBtn = document.createElement('button');
                     regroupBtn.onclick = () => regroup('tens');
-                    regroupBtn.className = 'mt-1 bg-amber-500 hover:bg-amber-600 text-slate-900 font-black text-xs px-2.5 py-1 rounded-full shadow-md flex items-center space-x-1 pulse-animation border border-amber-300 cursor-pointer';
-                    regroupBtn.innerHTML = '<i class="fa-solid fa-arrows-to-circle text-amber-900 mr-1"></i><span>滿10合成1個「百」 ➔</span>';
+                    regroupBtn.className = 'mt-1 bg-amber-500 hover:bg-amber-600 text-slate-900 font-black text-xs px-2 py-1 rounded-full shadow-md flex items-center justify-center pulse-animation border border-amber-300 cursor-pointer w-full';
+                    regroupBtn.innerHTML = '<i class="fa-solid fa-arrows-to-circle text-amber-900 mr-1"></i><span>滿10合成「百」 ➔</span>';
                     maskBox.appendChild(regroupBtn);
 
                     rowTens.appendChild(maskBox);
@@ -484,13 +484,13 @@
                     renderBlockGrid(rowTens, state.tens, 'tens', 0);
                 }
 
-                // 3. ONES (12x12px, Regroup Mask if >=10, 10 per row)
+                // 3. ONES COLUMN (Regroup Mask if >=10)
                 if (state.ones >= 10) {
                     const maskBox = document.createElement('div');
-                    maskBox.className = 'border-2 border-dashed border-slate-200 bg-white/20 rounded-xl p-2 flex flex-col items-center gap-1.5 shadow-lg relative';
+                    maskBox.className = 'w-full border-2 border-dashed border-slate-200 bg-white/20 rounded-xl p-2 flex flex-col items-center gap-1.5 shadow-lg relative shrink-0';
 
                     const itemsContainer = document.createElement('div');
-                    itemsContainer.className = 'flex gap-1.5 items-center';
+                    itemsContainer.className = 'flex flex-wrap gap-1 items-center justify-center';
                     for (let i = 0; i < 10; i++) {
                         itemsContainer.appendChild(createBlockDOM('ones'));
                     }
@@ -498,8 +498,8 @@
 
                     const regroupBtn = document.createElement('button');
                     regroupBtn.onclick = () => regroup('ones');
-                    regroupBtn.className = 'mt-1 bg-slate-100 hover:bg-white text-slate-900 font-black text-xs px-2.5 py-1 rounded-full shadow-md flex items-center space-x-1 pulse-animation border border-slate-300 cursor-pointer';
-                    regroupBtn.innerHTML = '<i class="fa-solid fa-arrows-to-circle text-indigo-600 mr-1"></i><span>滿10合成1個「十」 ➔</span>';
+                    regroupBtn.className = 'mt-1 bg-slate-100 hover:bg-white text-slate-900 font-black text-xs px-2 py-1 rounded-full shadow-md flex items-center justify-center pulse-animation border border-slate-300 cursor-pointer w-full';
+                    regroupBtn.innerHTML = '<i class="fa-solid fa-arrows-to-circle text-indigo-600 mr-1"></i><span>滿10合成「十」 ➔</span>';
                     maskBox.appendChild(regroupBtn);
 
                     rowOnes.appendChild(maskBox);
@@ -529,16 +529,10 @@
             if (countToRender <= 0) return;
 
             const gridWrapper = document.createElement('div');
-            gridWrapper.className = 'flex flex-col gap-2 items-start';
+            gridWrapper.className = 'flex flex-wrap gap-1.5 items-start w-full';
 
-            let currentRow = null;
             for (let i = 0; i < countToRender; i++) {
-                if (i % 10 === 0) {
-                    currentRow = document.createElement('div');
-                    currentRow.className = 'flex gap-1.5 items-center flex-wrap';
-                    gridWrapper.appendChild(currentRow);
-                }
-                currentRow.appendChild(createBlockDOM(type));
+                gridWrapper.appendChild(createBlockDOM(type));
             }
             container.appendChild(gridWrapper);
         }
@@ -561,14 +555,14 @@
             });
 
             if (type === 'hundreds') {
-                wrapper.className += ' w-[72px] h-[72px] bg-blue-600 border border-blue-300 rounded shadow';
+                wrapper.className += ' w-[64px] h-[64px] bg-blue-600 border border-blue-300 rounded shadow';
                 wrapper.innerHTML = `
                     <svg viewBox="0 0 100 100" class="w-full h-full pointer-events-none opacity-80">
                         <path d="M 10 0 L 10 100 M 20 0 L 20 100 M 30 0 L 30 100 M 40 0 L 40 100 M 50 0 L 50 100 M 60 0 L 60 100 M 70 0 L 70 100 M 80 0 L 80 100 M 90 0 L 90 100" stroke="#93c5fd" stroke-width="1.5"/>
-                        <path d="M 0 10 L 100 10 M 0 20 L 100 20 M 0 30 L 100 30 M 0 40 L 100 40 M 0 50 L 100 50 M 0 60 L 100 60 M 0 70 L 100 70 M 0 80 L 100 80 M 0 90 L 90 90" stroke="#93c5fd" stroke-width="1.5"/>
+                        <path d="M 0 10 L 100 10 M 0 20 L 100 20 M 0 30 L 100 30 M 0 40 L 100 40 M 0 50 L 100 50 M 0 60 L 100 60 M 0 70 L 100 70 M 0 80 L 80 80 M 0 90 L 90 90" stroke="#93c5fd" stroke-width="1.5"/>
                     </svg>`;
             } else if (type === 'tens') {
-                wrapper.className += ' w-[12px] h-[72px] bg-amber-400 border border-amber-200 rounded shadow-sm';
+                wrapper.className += ' w-[10px] h-[64px] bg-amber-400 border border-amber-200 rounded shadow-sm';
                 wrapper.innerHTML = `
                     <svg viewBox="0 0 10 100" class="w-full h-full pointer-events-none opacity-80">
                         <path d="M 0 10 L 10 10 M 0 20 L 10 20 M 0 30 L 10 30 M 0 40 L 10 40 M 0 50 L 10 50 M 0 60 L 10 60 M 0 70 L 10 70 M 0 80 L 10 80 M 0 90 L 10 90" stroke="#78350f" stroke-width="1.5"/>
